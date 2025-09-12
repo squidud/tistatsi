@@ -93,7 +93,13 @@ logo_scale = 0.15
 logo_path = os.path.join(src_dir, "logo.png")
 if os.path.exists(logo_path):
     logo = QPixmap(logo_path)
-    logo = logo.scaled(logo.width() * logo_scale, logo.height() * logo_scale, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+    logo = logo.scaled(
+        round(logo.width() * logo_scale),
+        round(logo.height() * logo_scale),
+        Qt.AspectRatioMode.KeepAspectRatio,
+        Qt.TransformationMode.SmoothTransformation
+    )
+
     logo_label = QLabel()
     logo_label.setPixmap(logo)
     logo_label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
