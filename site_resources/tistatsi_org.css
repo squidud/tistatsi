@@ -1,0 +1,59 @@
+/* Basic structural class definitions for all sites (such as spacing, layout, and common elements, NOT colors or fonts) */
+
+.nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.navlink{
+    /* Basic link styling for navigation links */
+    text-decoration: none;
+}
+
+.content{
+    /* Basic content area styling */
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.tsection {
+    display: flex;
+    justify-content: center; /* center the columns if fewer than 3 */
+    gap: 20px; /* optional spacing between columns */
+    padding: 20px 0;
+}
+
+.column1, .column2, .column3 {
+    flex: 1;
+    max-width: 100%;
+    padding: 10px;
+}
+
+/* Optional: make all columns take equal width only if they're present */
+.tsection > * {
+    flex: 1;
+}
+
+
+.timage{
+    /* Basic image styling */
+    max-width: 100%;
+    height: auto;
+}
+
+.ttitle{
+    /* Basic title styling */
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tparagraph{
+    /* Basic paragraph styling */
+    font-size: 16px;
+    line-height: 1.5;
+}
+

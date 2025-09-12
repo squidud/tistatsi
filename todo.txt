@@ -1,0 +1,23 @@
+# auto import organizational css file to selected edit dir (if not already in place, something other than styles.css)
+
+# auto populate last edit dir on launcher
+
+# create methods for scanning html documents and auto populating gui
+
+# create several options for stylistic themes, add theme folder, preview page for styles, core css classes that styles will apply to with the editor
+
+# checkmark for 'include in navbar' when creating new page
+
+# ability to load and edit existing html files
+
+# each time new page is added, update the nav section for each page
+
+# create tistatsi folder in all site folders with theme css and tistatsi_org css
+
+# theme selection in pageselector dialog
+
+# for image stuff, have user select image file, which it converts and compresses to webp and stores in an image directory in the site
+
+# for html, images should reference images/image.webp but when referenced in the ui it should be editor_directory/images/image.webp (should be fine)
+
+# logo.webp default logo, upload and convert image on page select screen

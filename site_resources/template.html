@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title><!--TITLE--></title>
+    <link rel="stylesheet" href="/tistatsi/tistatsi_org.css" />
+    <link rel="stylesheet" href="/tistatsi/theme.css" />
+</head>
+<body>
+    <div id="navbar" class="nav"></div>
+    <div class="content">
+        <!--START-->
+        <!--END-->
+    </div>
+</body>
+<div id="navbar"></div>
+<script>
+  fetch('/tistatsi/navbar.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('navbar').innerHTML = html;
+    })
+    .catch(err => console.error('Failed to load navbar:', err));
+</script>
+
+</html>

@@ -1,0 +1,7 @@
+beautifulsoup4==4.13.4
+pillow==11.3.0
+PyQt6==6.9.1
+PyQt6-Qt6==6.9.1
+PyQt6_sip==13.10.2
+soupsieve==2.7
+typing_extensions==4.14.1
