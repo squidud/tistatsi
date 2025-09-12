@@ -43,6 +43,6 @@ Launch the application:
 python launcher.py
 ```
 
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
+## License/etc
+Logo design by Breanna Dunworth
+This project is open source.
