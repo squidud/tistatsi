@@ -44,5 +44,6 @@ python launcher.py
 ```
 
 ## License/etc
-Logo design by Breanna Dunworth
+Logo design by Breanna Dunworth.
+
 This project is open source.
