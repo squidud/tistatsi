@@ -3,10 +3,10 @@ from PyQt6.QtWidgets import (
     QFileDialog, QFrame, QLineEdit, QScrollArea, QDialog, QComboBox, QCheckBox
 )
 from animated_button import AnimatedButton
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from bs4 import BeautifulSoup
-from block_components import Section, Title, Paragraph, Image
+from block_components import Section, Title, Paragraph, Image, set_change_callback
 import sys
 import re
 import os
@@ -17,6 +17,12 @@ app = QApplication([])
 
 #sections list
 sections = []
+
+# Auto-save variables
+has_unsaved_changes = False
+auto_save_timer = QTimer()
+auto_save_timer.setSingleShot(True)
+auto_save_timer.timeout.connect(lambda: auto_save())
 
 src_dir = os.path.dirname(os.path.abspath(__file__))
 editor_path = ""
@@ -79,7 +85,7 @@ if os.path.exists(icon_path):
 
 window = QWidget()
 window.setObjectName("Window")
-window.setWindowTitle("HTML Editor")
+window.setWindowTitle("Tistatsi - Editor")
 window.setGeometry(580, 100, 900, 580)
 layout = QVBoxLayout()
 
@@ -239,6 +245,39 @@ if "<!--START-->" in s and "<!--END-->" in s:
             layout.addWidget(section_widget)
 
 
+def mark_as_changed():
+    global has_unsaved_changes
+    if not has_unsaved_changes:
+        has_unsaved_changes = True
+        auto_save_status.setText("Unsaved changes...")
+        auto_save_status.setStyleSheet("color: #ff9900; font-size: 12px; padding: 5px;")
+    
+    # Reset the timer (debounce)
+    auto_save_timer.stop()
+    auto_save_timer.start(3000)  # Auto-save after 3 seconds of no changes
+
+def auto_save():
+    global has_unsaved_changes
+    if has_unsaved_changes:
+        auto_save_status.setText("Auto-saving...")
+        auto_save_status.setStyleSheet("color: #0099ff; font-size: 12px; padding: 5px;")
+        
+        # Call the existing save function without showing dialog
+        new_inner_html = convert_to_html(sections)
+        updated_html = re.sub(
+            r'<!--START-->(.*?)<!--END-->',
+            f'<!--START-->{new_inner_html}<!--END-->',
+            s,
+            flags=re.DOTALL
+        )
+        with open(html_path, 'w') as file:
+            file.write(updated_html)
+        
+        has_unsaved_changes = False
+        auto_save_status.setText("Saved")
+        auto_save_status.setStyleSheet("color: #00aa00; font-size: 12px; padding: 5px;")
+        print(f"Auto-saved changes to {html_path}")
+
 def saved_dialog():
     dialog = QDialog()
     dialog.setWindowTitle("Save Confirmation")
@@ -254,6 +293,7 @@ def saved_dialog():
     dialog.exec()
 
 def save_html():
+    global has_unsaved_changes
     new_inner_html = convert_to_html(sections)
 
     # Use regex to replace the content between the markers
@@ -267,12 +307,28 @@ def save_html():
     # Write the updated HTML back to the file
     with open(html_path, 'w') as file:
         file.write(updated_html)
+    
+    # Update auto-save status
+    has_unsaved_changes = False
+    auto_save_timer.stop()
+    auto_save_status.setText("Saved")
+    auto_save_status.setStyleSheet("color: #00aa00; font-size: 12px; padding: 5px;")
+    
     print(f"Changes saved to {html_path}")
     saved_dialog()
 
 save_button = AnimatedButton("Save Changes to HTML")
 save_button.clicked.connect(save_html) # Placeholder for save logic
 layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignHCenter)
+
+# Auto-save status label
+auto_save_status = QLabel("Saved")
+auto_save_status.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+auto_save_status.setStyleSheet("color: #666; font-size: 12px; padding: 5px;")
+layout.addWidget(auto_save_status, alignment=Qt.AlignmentFlag.AlignHCenter)
+
+# Set up change callback for auto-save
+set_change_callback(mark_as_changed)
 
 # Set layout and show window
 window.setLayout(layout)

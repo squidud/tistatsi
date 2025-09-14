@@ -19,6 +19,22 @@ with open("editorpath.txt", 'r') as file:
     editor_path = file.read().strip()
     print(f"Editor path loaded: {editor_path}")
 
+# Global callback for change notifications
+_change_callback = None
+
+def set_change_callback(callback):
+    """Set the callback function to be called when content changes"""
+    global _change_callback
+    _change_callback = callback
+
+def notify_change():
+    """Notify that content has changed"""
+    if _change_callback:
+        try:
+            _change_callback()
+        except Exception as e:
+            print(f"Error calling change callback: {e}")
+
 class Section:
     def __init__(self, parent, num_columns):
         self.content_objects = [None] * num_columns
@@ -143,6 +159,7 @@ class Title(ContentObject):
         def update_title():
             self.content = input_field.text()
             print(f"Title updated to: {self.content}")
+            notify_change()
         
         input_field.textChanged.connect(update_title)
         
@@ -156,6 +173,7 @@ class Paragraph(ContentObject):
         def update_paragraph():
             self.content = input_field.toPlainText()
             print(f"Paragraph updated to: {self.content}")
+            notify_change()
         
         input_field.textChanged.connect(update_paragraph)
         
@@ -207,6 +225,7 @@ class Image(ContentObject):
                 self.image_label.setPixmap(pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio))
                 self.image_label.setText("")  # clear text
                 print(f"Image path set to: {self.content}")
+                notify_change()
 
     def get_relative_path(self):
         if not self.content:

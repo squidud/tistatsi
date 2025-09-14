@@ -62,6 +62,21 @@ def open_page_selector():
             dest_file.write(navbar_content)
         print(f"Copied navbar.html to: {navbar_dest}")
     
+    # if index.html doesn't exist, create it from template
+    index_path = os.path.join(editor_path, "index.html")
+    if not os.path.exists(index_path):
+        template_src = os.path.join(src_dir, "site_resources/template.html")
+        if os.path.exists(template_src):
+            with open(template_src, 'r') as template_file:
+                template_content = template_file.read()
+            # Replace template placeholder with "Home"
+            updated_template = template_content.replace('<!--TITLE-->', 'Home')
+            with open(index_path, 'w') as index_file:
+                index_file.write(updated_template)
+            print(f"Created index.html at: {index_path}")
+        else:
+            print("Template file not found, cannot create index.html")
+    
 
     subprocess.Popen(['python3', os.path.join(src_dir, "pageselector.py")])
     window.close()

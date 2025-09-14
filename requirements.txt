@@ -1,7 +1,11 @@
 beautifulsoup4==4.13.4
+livereload==2.7.1
 pillow==11.3.0
 PyQt6==6.9.1
 PyQt6-Qt6==6.9.1
+PyQt6-WebEngine==6.9.0
+PyQt6-WebEngine-Qt6==6.9.2
 PyQt6_sip==13.10.2
 soupsieve==2.7
+tornado==6.5.2
 typing_extensions==4.14.1

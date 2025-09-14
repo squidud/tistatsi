@@ -48,7 +48,7 @@ file_buttons = []
 def on_html_file_clicked(filename):
     print(f"Selected file: {filename}")
     full_path = os.path.join(editor_path, filename)
-    subprocess.Popen(['python3', os.path.join(src_dir, "editor.py"), full_path])
+    subprocess.Popen([sys.executable, os.path.join(src_dir, "editor.py"), full_path])
 
 def refresh_file_buttons():
     # Remove old buttons from layout and memory
@@ -97,6 +97,14 @@ theme_section.addWidget(theme_dropdown, alignment=Qt.AlignmentFlag.AlignHCenter)
 on_theme_selected(theme_dropdown.currentText())  # Apply the initial theme
 #when a theme is selected, the theme.css file in the selected folder is copied to editor_path/tistatsi/theme.css
 
+# open preview button
+def open_preview():
+    print("Opening preview site...")
+    subprocess.Popen([sys.executable, os.path.join(src_dir, "previewsite.py")])
+preview_button = AnimatedButton("Open Site Preview")
+preview_button.clicked.connect(open_preview)
+layout.addWidget(preview_button, alignment=Qt.AlignmentFlag.AlignHCenter)
+
 helloMsg = QLabel("<h3>Select a page, or create a new one.</h3>")
 helloMsg.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 layout.addWidget(helloMsg)
@@ -105,7 +113,7 @@ layout.addWidget(helloMsg)
 def create_new():
     print("Creating a new page...")
     namedialog = QWidget()
-    namedialog.setWindowTitle("New Page")
+    namedialog.setWindowTitle("Tistatsi")
     namedialog.setGeometry(150, 150, 300, 100)
     vlayout = QVBoxLayout()
     label = QLabel("Enter the name for the new page (without .html):")
@@ -127,7 +135,7 @@ def create_new():
                 new_file.write(updated_template)
             print(f"New page created: {new_file_path}")
 
-            subprocess.Popen(['python3', os.path.join(src_dir, "editor.py"), new_file_path])
+            subprocess.Popen([sys.executable, os.path.join(src_dir, "editor.py"), new_file_path])
             refresh_file_buttons()
             namedialog.close()
         else:
